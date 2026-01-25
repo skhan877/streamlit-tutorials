@@ -18,28 +18,31 @@ class FileReader:
         elif self.extension == ".xlsx":
             return pd.read_excel(self.file, sheet_name=sheet_name, header=header)
 
-
-if __name__ == "__main__":
+def main():
     fdir = "C:\\Users\\samee\\Desktop\\py-projects\\other\\electricity\\datasets\\"
     files = [f for f in os.listdir(fdir)]
 
     reader = FileReader(fdir, files[0])
-    df = reader.read(3, 3)
+    df_daily = reader.read(3, 3)
+    df_monthly = reader.read(4, 4)
 
-    print(df.head(10))
+    df_daily_meta = reader.read(sheet_name=0, header=0)
+    # print(df_daily_meta.head())
+    # print(df_monthly.head(10))
+
+    st.title("UK Energy Market Analysis")
+
+    df_daily.set_index("Date", inplace=True)
+
+    fig, ax = plt.subplots(figsize=(15, 8))
+    ax.plot(df_daily["7-day average"], label="7-day average")
+    ax.set_title("System Price of Electricity")
+    ax.legend()
+    st.pyplot(fig)
 
 
-"""
-df_daily = pd.read_excel(fdir+files[0], sheet_name=3, header=3)
-df_monthly = pd.read_excel(fdir+files[0], sheet_name=4)
-
-df_daily.set_index("Date", inplace=True)
-# df_daily.plot()
-# plt.show()
-
-st.title("Energy Market Analysis")
-"""
-
+if __name__ == "__main__":
+    main()
 
 
 
