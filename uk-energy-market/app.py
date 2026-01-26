@@ -18,31 +18,45 @@ class FileReader:
         elif self.extension == ".xlsx":
             return pd.read_excel(self.file, sheet_name=sheet_name, header=header)
 
-def main():
-    fdir = "C:\\Users\\samee\\Desktop\\py-projects\\other\\electricity\\datasets\\"
-    files = [f for f in os.listdir(fdir)]
+def home():
+    st.header("UK Energy Market Analysis")
+    pg = st.navigation(["pages"])
+    pg.run()
 
-    reader = FileReader(fdir, files[0])
-    df_daily = reader.read(3, 3)
-    df_monthly = reader.read(4, 4)
 
-    df_daily_meta = reader.read(sheet_name=0, header=0)
-    # print(df_daily_meta.head())
-    # print(df_monthly.head(10))
+# def main():
+fdir = "C:\\Users\\samee\\Desktop\\py-projects\\other\\electricity\\datasets\\"
+files = [f for f in os.listdir(fdir)]
 
-    st.title("UK Energy Market Analysis")
+reader = FileReader(fdir, files[0])
 
-    df_daily.set_index("Date", inplace=True)
+# daily series (7 day avg)
+df_daily = reader.read(3, 3)
+df_daily.set_index("Date", inplace=True)
 
-    fig, ax = plt.subplots(figsize=(15, 8))
-    ax.plot(df_daily["7-day average"], label="7-day average")
-    ax.set_title("System Price of Electricity")
-    ax.legend()
-    st.pyplot(fig)
+# monthly series
+df_monthly = reader.read(4, 4)
+df_monthly.set_index("Date", inplace=True)
 
+# Begin building streamlit page
+st.header("UK Energy Market Analysis")
+
+# plots
+fig, ax = plt.subplots(figsize=(15, 8))
+ax.plot(df_daily["7-day average"], label="7-day average")
+ax.plot(df_monthly, label="Monthly Average", color="red")
+ax.set_title("System Price of Electricity")
+ax.legend()
+st.pyplot(fig)
+
+glossary = st.Page(
+    "glossary/glossary.py"
+    , title="Glossary"
+)
+
+pg = st.navigation([glossary])
 
 if __name__ == "__main__":
-    main()
-
-
+    # main()
+    pg.run()
 
