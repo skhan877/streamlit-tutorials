@@ -18,13 +18,7 @@ class FileReader:
         elif self.extension == ".xlsx":
             return pd.read_excel(self.file, sheet_name=sheet_name, header=header)
 
-def home():
-    st.header("UK Energy Market Analysis")
-    pg = st.navigation(["pages"])
-    pg.run()
 
-
-# def main():
 fdir = "C:\\Users\\samee\\Desktop\\py-projects\\other\\electricity\\datasets\\"
 files = [f for f in os.listdir(fdir)]
 
@@ -40,6 +34,7 @@ df_monthly.set_index("Date", inplace=True)
 
 # Begin building streamlit page
 st.header("UK Energy Market Analysis")
+# st.sidebar.success("Stuff here")
 
 # plots
 fig, ax = plt.subplots(figsize=(15, 8))
@@ -48,15 +43,4 @@ ax.plot(df_monthly, label="Monthly Average", color="red")
 ax.set_title("System Price of Electricity")
 ax.legend()
 st.pyplot(fig)
-
-glossary = st.Page(
-    "glossary/glossary.py"
-    , title="Glossary"
-)
-
-pg = st.navigation([glossary])
-
-if __name__ == "__main__":
-    # main()
-    pg.run()
 
