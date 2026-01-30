@@ -24,23 +24,13 @@ files = [f for f in os.listdir(fdir)]
 
 reader = FileReader(fdir, files[0])
 
-# daily series (7 day avg)
-df_daily = reader.read(3, 3)
-df_daily.set_index("Date", inplace=True)
+def fetch_series(period):
+    # daily series (7 day avg)
+    df_daily = reader.read(3, 3)
+    df_daily.set_index("Date", inplace=True)
 
-# monthly series
-df_monthly = reader.read(4, 4)
-df_monthly.set_index("Date", inplace=True)
+    # monthly series
+    df_monthly = reader.read(4, 4)
+    df_monthly.set_index("Date", inplace=True)
 
-# Begin building streamlit page
-st.header("UK Energy Market Analysis")
-# st.sidebar.success("Stuff here")
-
-# plots
-fig, ax = plt.subplots(figsize=(15, 8))
-ax.plot(df_daily["7-day average"], label="7-day average")
-ax.plot(df_monthly, label="Monthly Average", color="red")
-ax.set_title("System Price of Electricity")
-ax.legend()
-st.pyplot(fig)
-
+    return df_daily if period == "daily" else df_monthly

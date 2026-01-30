@@ -2,3 +2,4 @@ venv*
 images*
 .streamlit*
 .idea*
+__pycache__*
